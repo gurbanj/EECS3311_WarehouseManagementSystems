@@ -3,10 +3,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class LoginUI {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
 
@@ -26,13 +27,20 @@ public class LoginUI {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Replace with authentication logic
-                if (authenticateUser(usernameField.getText(), new String(passwordField.getPassword()))) {
-                    JOptionPane.showMessageDialog(null, "Authentication successful.");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Authentication failed.");
-                }
+            	try {
+					Login login = new Login(usernameField, passwordField);
+					if(login.authentication == true) {
+			    		JOptionPane.showMessageDialog(null, "Authentication successful.");	
+		            }
+					else {
+						JOptionPane.showMessageDialog(null, "Authentication failed.");
+					}
+				} catch (HeadlessException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
             }
+            
         });
 
         panel.add(usernameLabel);
@@ -46,11 +54,7 @@ public class LoginUI {
         frame.pack();
         frame.setVisible(true);
     }
-
-    // Replace this method with actual user database validation logic
-    private static boolean authenticateUser(String username, String password) {
-        // Replace with your authentication logic
-        // For demonstration, use hard-coded credentials
-        return "admin".equals(username) && "password123".equals(password);
-    }
+ 
+    
 }
+
